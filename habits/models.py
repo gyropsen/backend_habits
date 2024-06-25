@@ -11,7 +11,6 @@ class Habit(models.Model):
     PERIOD_CHOICES = (
         ("DAY", "daily"),
         ("WEEK", "weekly"),
-        ("MONTH", "monthly"),
     )
 
     owner = models.ForeignKey(
@@ -20,7 +19,7 @@ class Habit(models.Model):
         verbose_name=_("owner"),
         **NULLABLE,
         help_text=_("select user"),
-        related_name="habits"
+        related_name="habits",
     )
     place = models.CharField(max_length=256, verbose_name=_("place"), help_text=_("select place"))
     start_time = models.TimeField(verbose_name=_("start_time"), help_text=_("select start time"))
@@ -31,7 +30,7 @@ class Habit(models.Model):
         on_delete=models.SET_NULL,
         **NULLABLE,
         verbose_name=_("related_habit"),
-        help_text=_("select related_habit")
+        help_text=_("select related_habit"),
     )
     period = models.CharField(
         max_length=5, default="DAY", choices=PERIOD_CHOICES, verbose_name=_("period"), help_text=_("select period")
@@ -47,4 +46,4 @@ class Habit(models.Model):
         verbose_name_plural = _("habits")
 
     def __str__(self):
-        return self.email
+        return f"{self.action} at {self.start_time} in {self.place}"

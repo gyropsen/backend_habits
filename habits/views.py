@@ -1,8 +1,8 @@
+from django_filters import rest_framework as filters
 from rest_framework import generics
+from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.filters import OrderingFilter
-from django_filters import rest_framework as filters
 
 from habits import serializers
 from habits.models import Habit
@@ -14,6 +14,7 @@ class HabitViewSet(ModelViewSet):
     """
     Эндпоинт для работы со своими привычками
     """
+
     queryset = Habit.objects.all().order_by("pk")
     serializer_class = serializers.HabitSerializer
     pagination_class = CustomPagination
@@ -49,6 +50,7 @@ class HabitListAPIView(generics.ListAPIView):
     """
     Эндпоинт для получения всех публичных привычек
     """
+
     queryset = Habit.objects.filter(is_public=True).order_by("pk")
     serializer_class = serializers.HabitSerializer
     pagination_class = CustomPagination

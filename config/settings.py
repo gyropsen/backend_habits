@@ -160,8 +160,8 @@ CELERY_RESULT_BACKEND = os.getenv("REDIS_LOCATION")
 
 # Celery beat Options
 CELERY_BEAT_SCHEDULE = {
-    'check_active': {
-        'task': 'users.tasks.check_active',  # Путь к задаче
-        'schedule': timedelta(seconds=10),  # Расписание выполнения задачи (например, каждый день)
+    "check_active": {
+        "task": "users.tasks.check_active",  # Путь к задаче
+        "schedule": timedelta(seconds=10),  # Расписание выполнения задачи (например, каждый день)
     },
 }

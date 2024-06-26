@@ -149,3 +149,19 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=2),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
+
+# Celery Configuration Options
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+CELERY_BROKER_URL = os.getenv("REDIS_LOCATION")
+CELERY_RESULT_BACKEND = os.getenv("REDIS_LOCATION")
+
+# Celery beat Options
+CELERY_BEAT_SCHEDULE = {
+    'check_active': {
+        'task': 'users.tasks.check_active',  # Путь к задаче
+        'schedule': timedelta(seconds=10),  # Расписание выполнения задачи (например, каждый день)
+    },
+}

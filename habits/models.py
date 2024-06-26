@@ -8,6 +8,10 @@ NULLABLE = {"blank": True, "null": True}
 
 
 class Habit(models.Model):
+    @staticmethod
+    def get_time_now():
+        return timezone.now().time()
+
     PERIOD_CHOICES = (
         ("DAY", "daily"),
         ("WEEK", "weekly"),
@@ -22,7 +26,8 @@ class Habit(models.Model):
         related_name="habits",
     )
     place = models.CharField(max_length=256, verbose_name=_("place"), help_text=_("select place"))
-    start_time = models.TimeField(verbose_name=_("start_time"), help_text=_("select start time"))
+    start_time = models.TimeField(default=get_time_now, verbose_name=_("start_time"),
+                                  help_text=_("select start time"))
     action = models.TextField(max_length=2048, verbose_name=_("action"), help_text=_("select action"))
     is_nice = models.BooleanField(default=False, verbose_name=_("is_nice"), help_text=_("select nice"))
     related_habit = models.ForeignKey(

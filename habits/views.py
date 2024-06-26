@@ -1,6 +1,8 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.filters import OrderingFilter
+from django_filters import rest_framework as filters
 
 from habits import serializers
 from habits.models import Habit
@@ -50,3 +52,6 @@ class HabitListAPIView(generics.ListAPIView):
     queryset = Habit.objects.filter(is_public=True).order_by("pk")
     serializer_class = serializers.HabitSerializer
     pagination_class = CustomPagination
+    filter_backends = (filters.DjangoFilterBackend, OrderingFilter)
+    filterset_fields = ("is_nice", "related_habit", "period")
+    ordering_fields = ("start_time",)

@@ -161,7 +161,7 @@ CELERY_BROKER_URL = os.getenv("REDIS_LOCATION")
 CELERY_RESULT_BACKEND = os.getenv("REDIS_LOCATION")
 
 # Celery beat Options
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 # TG Bot Options
 BOT_TOKEN = os.getenv("BOT_TOKEN")

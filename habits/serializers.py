@@ -6,6 +6,10 @@ from habits.validators import (DurationValidator, HabitNiceValidator, RelatedHab
 
 
 class HabitSerializer(ModelSerializer):
+    """
+    Класс для работы с сериализацией привычек
+    """
+
     class Meta:
         model = Habit
         fields = "__all__"

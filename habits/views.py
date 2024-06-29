@@ -34,7 +34,12 @@ class HabitViewSet(ModelViewSet):
         if new_habit.tg_mailing:
             task_manager.create_periodic_task(new_habit)
 
-    def perform_update(self, serializer):
+    def perform_update(self, serializer: serializers.HabitSerializer) -> None:
+        """
+        Обновление привычки и, если надо взаимодействие с периодическим заданием
+        :param serializer: serializers.HabitSerializer
+        :return: None
+        """
         update_habit = serializer.save()
         update_habit.save()
         if update_habit.tg_mailing:
@@ -42,7 +47,12 @@ class HabitViewSet(ModelViewSet):
         else:
             task_manager.delete_periodic_task(update_habit)
 
-    def perform_destroy(self, instance):
+    def perform_destroy(self, instance: Habit) -> None:
+        """
+        Удаление привычки и, если надо, удаление периодической задачи
+        :param instance: Habit
+        :return:
+        """
         if instance.tg_mailing:
             task_manager.delete_periodic_task(instance)
         instance.delete()

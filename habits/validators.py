@@ -20,8 +20,10 @@ class DurationValidator:
         self.field = field
 
     def __call__(self, value: dict):
-        if value.get(self.field) > timedelta(seconds=120):
-            raise serializers.ValidationError(_("Duration more than 120 seconds"))
+        duration = value.get(self.field)
+        if duration:
+            if value.get(self.field) > timedelta(seconds=120):
+                raise serializers.ValidationError(_("Duration more than 120 seconds"))
 
 
 class RelatedHabitValidator:

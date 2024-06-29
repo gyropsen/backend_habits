@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_filters",
     "rest_framework_simplejwt",
+    "django_celery_beat",
     "habits",
     "users",
 ]
@@ -142,3 +144,25 @@ REST_FRAMEWORK = {
         # "rest_framework.permissions.AllowAny",
     ),
 }
+
+# Config JWT
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=2),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+
+# Celery Configuration Options
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+# Celery Broker Options
+CELERY_BROKER_URL = os.getenv("REDIS_LOCATION")
+CELERY_RESULT_BACKEND = os.getenv("REDIS_LOCATION")
+
+# Celery beat Options
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+# TG Bot Options
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_HOST = os.getenv("BOT_HOST")

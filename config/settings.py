@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_filters",
     "rest_framework_simplejwt",
+    "django_celery_beat",
     "habits",
     "users",
 ]
@@ -119,7 +120,7 @@ TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
 
-USE_TZ = False
+USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -155,13 +156,13 @@ CELERY_TIMEZONE = TIME_ZONE
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
+# Celery Broker Options
 CELERY_BROKER_URL = os.getenv("REDIS_LOCATION")
 CELERY_RESULT_BACKEND = os.getenv("REDIS_LOCATION")
 
 # Celery beat Options
-CELERY_BEAT_SCHEDULE = {
-    "check_active": {
-        "task": "users.tasks.check_active",  # Путь к задаче
-        "schedule": timedelta(seconds=10),  # Расписание выполнения задачи (например, каждый день)
-    },
-}
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+# TG Bot Options
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_HOST = os.getenv("BOT_HOST")

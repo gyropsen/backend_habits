@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -8,12 +10,9 @@ NULLABLE = {"blank": True, "null": True}
 
 
 class Habit(models.Model):
-    def get_time_now(self):
-        return timezone.now().time
-
     PERIOD_CHOICES = (
-        ("DAY", "daily"),
-        ("WEEK", "weekly"),
+        (1, "once every 1 days"),
+        (7, "once every 7 days"),
     )
 
     owner = models.ForeignKey(
@@ -25,7 +24,7 @@ class Habit(models.Model):
         related_name="habits",
     )
     place = models.CharField(max_length=256, verbose_name=_("place"), help_text=_("select place"))
-    start_time = models.TimeField(default=get_time_now, verbose_name=_("start_time"), help_text=_("select start time"))
+    start_time = models.DateTimeField(default=timezone.now, verbose_name=_("start_time"), help_text=_("select start time"))
     action = models.TextField(max_length=2048, verbose_name=_("action"), help_text=_("select action"))
     is_nice = models.BooleanField(default=False, verbose_name=_("is_nice"), help_text=_("select nice"))
     related_habit = models.ForeignKey(
@@ -35,14 +34,14 @@ class Habit(models.Model):
         verbose_name=_("related_habit"),
         help_text=_("select related_habit"),
     )
-    period = models.CharField(
-        max_length=5, default="DAY", choices=PERIOD_CHOICES, verbose_name=_("period"), help_text=_("select period")
-    )
+    period = models.IntegerField(default=1, choices=PERIOD_CHOICES, verbose_name=_("period"),
+                                 help_text=_("select period"))
     reward = models.CharField(max_length=256, help_text=_("select reward"), **NULLABLE, verbose_name=_("reward"))
     duration = models.DurationField(
         default=timezone.timedelta(seconds=120), verbose_name=_("duration"), help_text=_("select duration")
     )
     is_public = models.BooleanField(default=False, verbose_name=_("is_public"), help_text=_("select public"))
+    tg_mailing = models.BooleanField(default=False, verbose_name=_("tg_mailing"), help_text=_("select tg_mailing"))
 
     class Meta:
         verbose_name = _("habit")

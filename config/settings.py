@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
+from datetime import timedelta
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -38,11 +40,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
+    # Вспомогательные приложения
     "phonenumber_field",
     "rest_framework",
     "django_filters",
-
+    "rest_framework_simplejwt",
+    "django_celery_beat",
+    "drf_spectacular",
+    "corsheaders",
+    # Основные приложения
     "habits",
     "users",
 ]
@@ -50,6 +56,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -136,9 +143,47 @@ AUTH_USER_MODEL = "users.User"
 # DRF config
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
-    # "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
-    "DEFAULT_PERMISSION_CLASSES": (
-        # "rest_framework.permissions.IsAuthenticated",
-        'rest_framework.permissions.AllowAny',
-    ),
+    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+# Config JWT
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=2),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+
+# Celery Configuration Options
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+# Celery Broker Options
+CELERY_BROKER_URL = os.getenv("REDIS_LOCATION")
+CELERY_RESULT_BACKEND = os.getenv("REDIS_LOCATION")
+
+# Celery beat Options
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+# TG Bot Options
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_HOST = os.getenv("BOT_HOST")
+
+# CORS Options
+CORS_ALLOWED_ORIGINS = [
+    "https://read-only.example.com",
+    "https://read-and-write.example.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://read-and-write.example.com",
+]
+
+# DRF SPECTACULAR Options
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Backend_nabits",
+    "DESCRIPTION": "Backend сервер SPA приложения управления привычками",
+    "VERSION": "1.0.1",
+    "SERVE_INCLUDE_SCHEMA": False,
 }

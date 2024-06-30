@@ -1,12 +1,12 @@
 from datetime import datetime
 
-from rest_framework.test import APITestCase
-from rest_framework import status
 from django.urls import reverse
+from django_celery_beat.models import PeriodicTask
+from rest_framework import status
+from rest_framework.test import APITestCase
 
 from habits.models import Habit
 from users.models import User
-from django_celery_beat.models import PeriodicTask
 
 
 class HabitTestCase(APITestCase):
@@ -26,7 +26,7 @@ class HabitTestCase(APITestCase):
             action="walk",
             place="street",
             start_time="2024-06-30T14:54:00+03:00",
-            tg_mailing=True
+            tg_mailing=True,
         )
 
     def test_create_habit_and_periodic_task(self):
@@ -34,11 +34,12 @@ class HabitTestCase(APITestCase):
         Тестирование создания привычки и периодической задачи
         """
         url = reverse("habits:my_habits-list")
-        data = {"start_time": "2024-06-30T14:54:00+03:00",
-                "action": "read the books",
-                "place": "home",
-                "tg_mailing": True
-                }
+        data = {
+            "start_time": "2024-06-30T14:54:00+03:00",
+            "action": "read the books",
+            "place": "home",
+            "tg_mailing": True,
+        }
         response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         habit = response.json()
@@ -84,4 +85,3 @@ class HabitTestCase(APITestCase):
         url = reverse("habits:my_habits-detail", args=(self.test_habit.pk,))
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-

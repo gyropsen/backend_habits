@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     # Вспомогательные приложения
     "phonenumber_field",
     "rest_framework",
@@ -49,7 +48,6 @@ INSTALLED_APPS = [
     "django_celery_beat",
     "drf_spectacular",
     "corsheaders",
-
     # Основные приложения
     "habits",
     "users",
@@ -64,7 +62,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -148,7 +145,7 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
     "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 # Config JWT
@@ -185,8 +182,8 @@ CSRF_TRUSTED_ORIGINS = [
 
 # DRF SPECTACULAR Options
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Backend_nabits',
-    'DESCRIPTION': 'Backend сервер SPA приложения управления привычками',
-    'VERSION': '1.0.1',
-    'SERVE_INCLUDE_SCHEMA': False,
+    "TITLE": "Backend_nabits",
+    "DESCRIPTION": "Backend сервер SPA приложения управления привычками",
+    "VERSION": "1.0.1",
+    "SERVE_INCLUDE_SCHEMA": False,
 }

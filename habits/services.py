@@ -21,7 +21,7 @@ class TelegramBot:
         self.token = settings.BOT_TOKEN
         self.host = settings.BOT_HOST
 
-    def send_request(self, params: dict[str, str], method: str) -> None:
+    def send_request(self, params: dict[str, str], method: str) -> bool:
         """
         Отправка запроса
         :param params: параметры в запросе
@@ -30,8 +30,12 @@ class TelegramBot:
         """
         url = f"{self.host}{self.token}/{method}"
         response = requests.get(url, params=params)
+        # В зависимости от кода ошибки вернуть True или False
         if response.status_code != 200:
             print(f"Status code: {response.status_code}\n" f"Data: {response.text}")
+            return False
+        else:
+            return True
 
 
 class PeriodicTaskManager:
@@ -57,7 +61,9 @@ class PeriodicTaskManager:
             interval=schedule,
             name=f"{habit.pk} periodic task",
             task="habits.tasks.send_message",
-            args=json.dumps([habit.owner.telegram_id, f"{habit.action} at {habit.start_time} in {habit.place}"]),
+            args=json.dumps(
+                [habit.owner.telegram_id, habit.pk, f"{habit.action} at {habit.start_time} in {habit.place}"]
+            ),
             start_time=habit.start_time,
         )
         return task if task else created

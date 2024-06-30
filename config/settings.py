@@ -40,11 +40,17 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # Вспомогательные приложения
     "phonenumber_field",
     "rest_framework",
     "django_filters",
     "rest_framework_simplejwt",
     "django_celery_beat",
+    "drf_spectacular",
+    "corsheaders",
+
+    # Основные приложения
     "habits",
     "users",
 ]
@@ -52,11 +58,13 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -139,10 +147,8 @@ AUTH_USER_MODEL = "users.User"
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
     "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
-    "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticated",
-        # "rest_framework.permissions.AllowAny",
-    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 # Config JWT
@@ -161,8 +167,26 @@ CELERY_BROKER_URL = os.getenv("REDIS_LOCATION")
 CELERY_RESULT_BACKEND = os.getenv("REDIS_LOCATION")
 
 # Celery beat Options
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 # TG Bot Options
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 BOT_HOST = os.getenv("BOT_HOST")
+
+# CORS Options
+CORS_ALLOWED_ORIGINS = [
+    "https://read-only.example.com",
+    "https://read-and-write.example.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://read-and-write.example.com",
+]
+
+# DRF SPECTACULAR Options
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Backend_nabits',
+    'DESCRIPTION': 'Backend сервер SPA приложения управления привычками',
+    'VERSION': '1.0.1',
+    'SERVE_INCLUDE_SCHEMA': False,
+}

@@ -7,6 +7,10 @@ NULLABLE = {"blank": True, "null": True}
 
 
 class User(AbstractUser):
+    """
+    Класс модели пользователя
+    """
+
     username = None
 
     telegram_id = models.CharField(

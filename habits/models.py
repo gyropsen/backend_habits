@@ -10,6 +10,10 @@ NULLABLE = {"blank": True, "null": True}
 
 
 class Habit(models.Model):
+    """
+    Класс модели привычки
+    """
+
     PERIOD_CHOICES = (
         (1, "once every 1 days"),
         (7, "once every 7 days"),
@@ -24,7 +28,9 @@ class Habit(models.Model):
         related_name="habits",
     )
     place = models.CharField(max_length=256, verbose_name=_("place"), help_text=_("select place"))
-    start_time = models.DateTimeField(default=timezone.now, verbose_name=_("start_time"), help_text=_("select start time"))
+    start_time = models.DateTimeField(
+        default=timezone.now, verbose_name=_("start_time"), help_text=_("select start time")
+    )
     action = models.TextField(max_length=2048, verbose_name=_("action"), help_text=_("select action"))
     is_nice = models.BooleanField(default=False, verbose_name=_("is_nice"), help_text=_("select nice"))
     related_habit = models.ForeignKey(
@@ -34,8 +40,9 @@ class Habit(models.Model):
         verbose_name=_("related_habit"),
         help_text=_("select related_habit"),
     )
-    period = models.IntegerField(default=1, choices=PERIOD_CHOICES, verbose_name=_("period"),
-                                 help_text=_("select period"))
+    period = models.IntegerField(
+        default=1, choices=PERIOD_CHOICES, verbose_name=_("period"), help_text=_("select period")
+    )
     reward = models.CharField(max_length=256, help_text=_("select reward"), **NULLABLE, verbose_name=_("reward"))
     duration = models.DurationField(
         default=timezone.timedelta(seconds=120), verbose_name=_("duration"), help_text=_("select duration")
